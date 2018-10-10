@@ -1,11 +1,11 @@
 #include "monster.h"
 #include "main.h"
-//Method to draw the monster character through consecutive circles algorithm
+//绘画怪物
 void drawMonster(float positionX, float positionY, float r, float g, float b){
 	int x, y;
 	glBegin(GL_LINES);
 	glColor3f(r, g, b);
-	//draw the head
+	//头
 	for (int k = 0; k < 32; k++){
 		x = (float)k / 2.0 * cos(360 * M_PI / 180.0) + (positionX*squareSize);
 		y = (float)k / 2.0* sin(360 * M_PI / 180.0) + (positionY*squareSize);
@@ -17,11 +17,11 @@ void drawMonster(float positionX, float positionY, float r, float g, float b){
 		}
 	}
 	glEnd();	
-	//draw body
+	//身体
 	glRectf((positionX*squareSize) - 17, positionY*squareSize, (positionX*squareSize) + 15, (positionY*squareSize) + 15);
 	glBegin(GL_POINTS);
 	glColor3f(0, 0.2, 0.4);
-	//draw eyes and legs
+	//眼睛和退
 	glVertex2f((positionX*squareSize) - 11, (positionY*squareSize) + 14); //legs
 	glVertex2f((positionX*squareSize) - 1, (positionY*squareSize) + 14); //legs
 	glVertex2f((positionX*squareSize) + 8, (positionY*squareSize) + 14); //legs
@@ -30,14 +30,14 @@ void drawMonster(float positionX, float positionY, float r, float g, float b){
 	glEnd();
 }
 
-//Method to update the position of the monsters randomly
+//怪物移动
 void updateMonster(float* monster, int id){
-		//find the current position of the monster
+		//找到当前位置
 		int x1Quadrant = (int)((monster[0] - (2/squareSize)) - (16.0 *cos(360 * M_PI / 180.0)) / squareSize);
 		int x2Quadrant = (int)((monster[0] + (2/squareSize)) + (16.0 *cos(360 * M_PI / 180.0)) / squareSize);
 		int y1Quadrant = (int)((monster[1] - (2/squareSize)) - (16.0 *cos(360 * M_PI / 180.0)) / squareSize);
 		int y2Quadrant = (int)((monster[1] + (2/squareSize)) + (16.0 *cos(360 * M_PI / 180.0)) / squareSize);
-		//move him acording to its direction until he hits an obstacle
+		//怪物移动和撞墙检测
 		switch ((int)monster[2]){
 		case 1:
 			if (!bitmap.at(x1Quadrant).at((int)monster[1])){ 

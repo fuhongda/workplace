@@ -1,5 +1,5 @@
-#ifndef _GAMESTART__
-#define _GAMESTART__
+#ifndef _GAMESTART_H_
+#define _GAMESTART_H_
 #include <iterator>
 
 void welcomeScreen();

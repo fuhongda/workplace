@@ -1,5 +1,3 @@
-#ifndef _PACMAN_H_
-#define _PACMAN_H_
 #include "main.h"
 #include "control.h"
 #include "food.h"
@@ -41,7 +39,7 @@ int main(int argc, char** argv){
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);//显示方式(双缓重区，深度缓冲)
 	glutInitWindowSize(750, 750);//窗口大小
 	glutInitWindowPosition(500, 50);//窗口起始位置
-	glutCreateWindow("Pacman - by HD");
+	glutCreateWindow("Pacman - by fuhongda");
 
 	//定义所有控制功能
 	glutDisplayFunc(display);//窗口更新
@@ -55,6 +53,3 @@ int main(int argc, char** argv){
 	glutMainLoop();
 	return 0;
 }
-
-
-#endif
