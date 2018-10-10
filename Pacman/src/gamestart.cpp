@@ -16,7 +16,7 @@ void welcomeScreen(){
 	glRasterPos2f(150, 200);
 	while (it!=message.end())
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *it++);
-	message = "Pacman - by shiyanlou";
+	message = "Pacman - by fuhongda";
 	glColor3f(1, 1, 1);
 	glRasterPos2f(225, 250);
 	it = message.begin();
