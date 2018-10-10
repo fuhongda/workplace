@@ -38,7 +38,7 @@ void resultsDisplay(){
 		it = message.begin();
 		while (it!=message.end())
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *it++);
-		message = "*************************";
+		message = "*************************************";
 		glRasterPos2f(210, 350);
 		it = message.begin();
 		while (it!=message.end())
