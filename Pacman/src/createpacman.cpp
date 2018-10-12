@@ -4,7 +4,7 @@
 
 void drawPacman(float positionX, float positionY, float rotation){
 	int x, y;
-	glBegin(GL_LINES);//创建线
+	glBegin(GL_LINES);//创建画笔
 	glColor3f(1.0, 1.0, 0.0);
 	for (int k = 0; k < 32; k++){
 		x = (float)k / 2.0 * cos((30 + 90*rotation) * M_PI / 180.0) + (positionX*squareSize);
