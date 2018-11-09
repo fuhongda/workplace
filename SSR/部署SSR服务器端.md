@@ -5,9 +5,7 @@
 以下是3条命令，每次输入一行、回车，等待屏幕上的操作完成后再输入下一条。
 
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
-chmod +x shadowsocks.sh
-./shadowsocks.sh 2>&1 | tee shadowsocks.log
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && sh install.sh
 ```
 
 #### TCP Fast Open
