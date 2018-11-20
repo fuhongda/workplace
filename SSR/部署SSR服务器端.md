@@ -6,7 +6,11 @@
 
 ```
 yum install wget -y
-wget —no-check-certificate https://freed.ga/github/shadowsocksR.sh; bash shadowsocksR.sh
+wget --no-check-certificate https://raw.githubusercontent.com/Ellean/ShadowsocksRR_Auto_Installer/master/ShadowsocksRR.sh
+
+chmod +x ShadowsocksRR.sh
+
+bash ShadowsocksRR.sh
 ```
 
 #### TCP Fast Open
