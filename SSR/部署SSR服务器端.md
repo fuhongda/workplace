@@ -5,7 +5,8 @@
 以下是3条命令，每次输入一行、回车，等待屏幕上的操作完成后再输入下一条。
 
 ```
-yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && sh install.sh
+yum install wget -y
+wget —no-check-certificate https://freed.ga/github/shadowsocksR.sh; bash shadowsocksR.sh
 ```
 
 #### TCP Fast Open
