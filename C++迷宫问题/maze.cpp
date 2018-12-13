@@ -1,12 +1,15 @@
 #include <iostream>
-#include <cstdlib>
-#include <unistd.h>
-#include <stdio.h>
-#include <ctime>
+#include <cstdlib>			//标准库
+#include <unistd.h>			//延时函数
+#include <stdio.h>			//getchar	
+#include <ctime>			
+#include <termios.h>		//终端设置
 
 #define MAX_X 20
 #define MAX_Y 30
-bool flag;
+bool flag = false;
+bool slow = false;
+bool autogame = true;
 
 using namespace std;
 
@@ -68,8 +71,6 @@ public:
 			yy = p->y;
 			delete p;
 		}
-		else
-			cout<<"栈已空出栈失败"<<endl;
 		return head;
 	}
 
@@ -130,7 +131,9 @@ void printMaze(){
 		}
 		cout<<endl;
 	}
-	//sleep(1);											//延时函数
+	if(slow){
+		sleep(1);											//延时函数
+	}
 }
 
 void check(stack_of_maze &s){
@@ -210,7 +213,86 @@ void check(stack_of_maze &s){
 	}
 }
 
-void move(stack_of_maze &s){
+//输入
+char getch(){
+	char ch;   
+    static struct termios oldt, newt;				//保存原有终端属性和新设置的终端属性
+    tcgetattr( STDIN_FILENO, &oldt);				//获得终端原有属性并保存在结构体oldflag
+
+    //设置新的终端属性
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON);          
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+
+    //取消回显
+    system("stty -echo");
+    ch = getchar();
+    system("stty echo");    
+
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt);		//让终端恢复为原有的属性
+	return ch;
+}
+
+void move(){
+	int x=1,y=1;					//出发点	
+	while(1){
+		switch(getch()){
+			case 's':
+				if(maze[x+1][y]==0){
+					maze[x][y] = 0;
+					x = x + 1;
+					maze[x][y] = 7;			//当前位置
+					printMaze();
+					if((x==MAX_X-1)&&(y==MAX_Y-2)){
+						cout<<"\n\n              成功走出"<<endl;
+						return;
+					}
+				}				
+				break;
+			case 'd':
+				if(maze[x][y+1]==0){
+					if(maze[x][y+1]==0){
+						maze[x][y] = 0;
+						y = y + 1;
+						maze[x][y] = 7;
+						printMaze();
+						if((x==MAX_X-1)&&(y==MAX_Y-2)){
+							cout<<"\n\n              成功走出"<<endl;
+							return;
+						}
+					}		
+				}
+				
+				break;
+			case 'w':
+				if(maze[x-1][y]==0){
+					maze[x][y] = 0;
+					x = x - 1;
+					maze[x][y] = 7;
+					printMaze();
+					if((x==MAX_X-1)&&(y==MAX_Y-2)){
+						cout<<"\n\n              成功走出"<<endl;
+						return;
+					}
+				}	
+				break;
+			case 'a':
+				if(maze[x][y-1]==0){
+					maze[x][y] = 0;
+					y = y - 1;
+					maze[x][y] = 7;
+					printMaze();
+					if((x==MAX_X-1)&&(y==MAX_Y-2)){
+						cout<<"\n\n              成功走出"<<endl;
+						return;
+					}
+				}		
+				break;
+		}
+	}
+}
+
+void autoMove(stack_of_maze &s){
 	int x=1,y=1;					//出发点	
 	while(1){
 		maze[x][y] = 2;
@@ -221,10 +303,11 @@ void move(stack_of_maze &s){
 			maze[x][y] = 3;			//在当前位置做一个向下的标志
 			x = x + 1;
 			maze[x][y] = 7;			//当前位置
-			printMaze();
+			if(slow)
+				printMaze();
 			if((x==MAX_X-1)&&(y==MAX_Y-2)){
 				s.push(x,y,'*');
-				cout<<"成功走出"<<endl;
+				cout<<"\n\n              成功走出"<<endl;
 				return;
 			}
 			else
@@ -237,10 +320,11 @@ void move(stack_of_maze &s){
 			maze[x][y] = 4;			//在当前位置做一个向右的标志
 			y = y + 1;
 			maze[x][y] = 7;
-			printMaze();
+			if(slow)
+				printMaze();
 			if((x==MAX_X-1)&&(y==MAX_Y-2)){
 				s.push(x,y,'*');
-				cout<<"成功走出"<<endl;
+				cout<<"\n\n              成功走出"<<endl;
 				return;
 			}
 			else
@@ -253,10 +337,11 @@ void move(stack_of_maze &s){
 			maze[x][y] = 6;			//在当前位置做一个向上的标志
 			x = x - 1;
 			maze[x][y] = 7;
-			printMaze();
+			if(slow)
+				printMaze();
 			if((x==MAX_X-1)&&(y==MAX_Y-2)){
 				s.push(x,y,'*');
-				cout<<"成功走出"<<endl;
+				cout<<"\n\n              成功走出"<<endl;
 				return;
 			}
 			else
@@ -269,10 +354,11 @@ void move(stack_of_maze &s){
 			maze[x][y] = 5;			//在当前位置做一个向右的标志
 			y = y - 1;
 			maze[x][y] = 7;
-			printMaze();
+			if(slow)
+				printMaze();
 			if((x==MAX_X-1)&&(y==MAX_Y-2)){
 				s.push(x,y,'*');
-				cout<<"成功走出"<<endl;
+				cout<<"\n\n              成功走出"<<endl;
 				return;
 			}
 			else
@@ -281,7 +367,7 @@ void move(stack_of_maze &s){
 
 		//上下左右不通，则回退
 		if(s.pop(x,y)==NULL && maze[x-1][y]!=0 && maze[x][y-1]!=0 && maze[x][y+1]!=0 && maze[x+1][y]!=0){
-			cout<<"没有找到合适的路径"<<endl;
+			cout<<"\n\n              没有找到合适的路径"<<endl;
 			maze[0][1] = 7;
 			if(maze[1][1]!=1)
 				maze[1][1] = 2;
@@ -298,13 +384,28 @@ void gamestart(){
 		stack_of_maze stack;			//定义一个栈的对象，用来记录行走路线	
 		createMaze();
 		check(stack);
+		system("clear");
+		cout<<"\t*                loading.              *"<<endl;
+		system("clear");
+		cout<<"\t*                loading..             *"<<endl;
+		system("clear");
+		cout<<"\t*                loading...            *"<<endl;
 	}
-	printMaze();					//输出当前迷宫的初始状态
-	stack_of_maze stack1;				
-	move(stack1);					//行走中……
-	printMaze();					//输出迷宫的最终状态
-	cout<<"\n输入任意键继续..."<<endl;
+	printMaze();						//输出当前迷宫的初始状态
+	cout<<"\n\n              输入enter键继续"<<endl;
 	getchar();
+	if(!autogame){
+		move();
+		cout<<"\n\n              输入enter键继续"<<endl;
+		getchar();
+		menu();
+	}
+	else{
+		stack_of_maze stack1;				
+		autoMove(stack1);					//行走中……
+	}	
+	printMaze();							//输出迷宫的最终状态
+	cout<<"\n\n              输入enter键继续"<<endl;
 	getchar();
 	menu();
 }
@@ -314,17 +415,35 @@ void menu(){
 	int num;
 	cout<<"\t****************************************"<<endl;
 	cout<<"\t*                                      *"<<endl;
-	cout<<"\t*               1.开始游戏             *"<<endl;
+	cout<<"\t*               1.查看路径             *"<<endl;
 	cout<<"\t*                                      *"<<endl;
-	cout<<"\t*               2.退出游戏             *"<<endl;
+	cout<<"\t*               2.自动进行             *"<<endl;
+	cout<<"\t*                                      *"<<endl;
+	cout<<"\t*               3.自行游戏             *"<<endl;
+	cout<<"\t*                                      *"<<endl;
+	cout<<"\t*               4.退出游戏             *"<<endl;
 	cout<<"\t*                                      *"<<endl;
 	cout<<"\t****************************************"<<endl;
-	cin>>num;
-	switch(num){
-		case 1:
+	slow = false;
+	switch(getch()){
+		case '1':
+			autogame = true;
+			gamestart();break;
+		case '2':
+			autogame = true;
+			slow = true;
 			gamestart();
-		case 2:
-			exit(1);
+			break;
+		case '3':
+			autogame = false;
+			gamestart();
+			break;
+		case '4':
+			exit(1);break;
+		default:
+			cout<<"\n\n              错误操作，输入enter返回！"<<endl;
+			getchar();
+			menu();
 	}
 	getchar();
 }
