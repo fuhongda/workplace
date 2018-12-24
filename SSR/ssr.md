@@ -3,7 +3,7 @@
 #### 获取 SSR
 
 ```
-wget --no-check-certificate -O shadowsocks-libev_CN.sh https://raw.githubusercontent.com/uxh/shadowsocks_bash/master/shadowsocks-libev_CN.sh
+wget -N –no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/ssr.sh
 ```
 
 #### BBR 搭建
